@@ -30,7 +30,7 @@ public class FXMLController {
     private TextField txtAnno; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxNazione"
-    private ComboBox<?> boxNazione; // Value injected by FXMLLoader
+    private ComboBox<CountryAndNumber> boxNazione; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
@@ -54,6 +54,7 @@ public class FXMLController {
 					txtResult.appendText(String.format("%s %d\n",
 							c.getCountry().getStateName(), c.getNumber()));
 				}
+				this.boxNazione.getItems().addAll(list);
 			}
 
 		} catch (NumberFormatException e) {
@@ -64,7 +65,7 @@ public class FXMLController {
 
     @FXML
     void doSimula(ActionEvent event) {
-
+    	this.model.simulaMigrazione(this.boxNazione.getValue());
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

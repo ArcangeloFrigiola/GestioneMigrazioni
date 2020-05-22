@@ -51,5 +51,17 @@ public class Model {
 		Collections.sort(list);
 		return list ;
 	}
+	
+	public void simulaMigrazione(CountryAndNumber paeseOrigine) {
+		
+		Simulator sim = new Simulator();
+		sim.setPaeseOrigine(paeseOrigine);
+		sim.setModelloMondo(this.graph, this.getCountryAndNumber());
+		sim.run();
+	}
+	
+	public Graph<Country, DefaultEdge> getGrafo() {
+		return this.graph;
+	}
 
 }
