@@ -48,20 +48,31 @@ public class Model {
 		for(Country c: graph.vertexSet()) {
 			list.add(new CountryAndNumber(c, graph.degreeOf(c))) ;
 		}
-		Collections.sort(list);
+		Collections.sort(list , new ComparatoreNazioniNome());
 		return list ;
 	}
 	
-	public void simulaMigrazione(CountryAndNumber paeseOrigine) {
+	public List<CountryAndNumber> simulaMigrazione(CountryAndNumber paeseOrigine) {
 		
 		Simulator sim = new Simulator();
+		Map<Country, Integer> mappaPaesiSimulati = new HashMap<>();
+		List<CountryAndNumber> paesiSim = new ArrayList<>() ;
 		sim.setPaeseOrigine(paeseOrigine);
 		sim.setModelloMondo(this.graph, this.getCountryAndNumber());
 		sim.run();
+		
+		mappaPaesiSimulati = sim.getMappaSimulazione();
+		for(Country c: mappaPaesiSimulati.keySet()) {
+			paesiSim.add(new CountryAndNumber(c, mappaPaesiSimulati.get(c)));
+		}
+		
+		Collections.sort(paesiSim , new ComparatoreNazioniNome());
+		return paesiSim;
 	}
 	
 	public Graph<Country, DefaultEdge> getGrafo() {
 		return this.graph;
 	}
+	
 
 }

@@ -5,6 +5,7 @@
 package it.polito.tdp.borders;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -37,6 +38,7 @@ public class FXMLController {
 
     @FXML
     void doCalcolaConfini(ActionEvent event) {
+    	
     	txtResult.clear();
     	String annoS = txtAnno.getText();
 		try {
@@ -65,7 +67,27 @@ public class FXMLController {
 
     @FXML
     void doSimula(ActionEvent event) {
-    	this.model.simulaMigrazione(this.boxNazione.getValue());
+    	
+    	txtResult.clear();
+    	try {
+			List<CountryAndNumber> list = this.model.simulaMigrazione(this.boxNazione.getValue());
+
+			if (list.size() == 0) {
+				txtResult.appendText("Non ci sono stati corrispondenti\n");
+			} else {
+				txtResult.appendText("Stati coinvolti nella simulazione e rispettive popolazioni: \n");
+				for (CountryAndNumber c : list) {
+					txtResult.appendText(String.format("%s %d\n",
+							c.getCountry().getStateName(), c.getNumber()));
+				}
+				
+			}
+
+		} catch (NumberFormatException e) {
+			txtResult.appendText("Errore di formattazione dell'anno\n");
+			return;
+		}
+    
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

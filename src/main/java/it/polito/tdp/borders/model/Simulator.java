@@ -46,10 +46,10 @@ public class Simulator {
 		this.queue.clear();
 		Event primo = new Event(EventType.EMIGRAZIONE, this.T, this.migranti, this.paeseOrigine.getCountry());
 		this.queue.add(primo);
-		mappaPaesiSimulati.put(primo.getPaese(), primo .getNumPersone());
+		//mappaPaesiSimulati.put(primo.getPaese(), primo.getNumPersone());
 		this.T++;
 		
-		Event secondo = new Event(EventType.EMIGRAZIONE, this.T, (this.migranti-this.migranti/2), this.paeseOrigine.getCountry());
+		/*Event secondo = new Event(EventType.EMIGRAZIONE, this.T, (this.migranti-this.migranti/2), this.paeseOrigine.getCountry());
 		this.queue.add(secondo);
 		
 		int count = 0;
@@ -65,7 +65,7 @@ public class Simulator {
 			mappaPaesiSimulati.put(e.getPaese(), e.getNumPersone());
 	
 			
-		}while(count<this.paeseOrigine.getNumber());
+		}while(count<this.paeseOrigine.getNumber());*/
 		
 		while(!this.queue.isEmpty()) {
 			Event e = this.queue.poll();
@@ -95,7 +95,13 @@ public class Simulator {
 		
 		if(notStanziali >= numeroPaesiVicini) {
 			
-			this.mappaPaesiSimulati.replace(e.getPaese(), e.getNumPersone()-notStanziali);
+			if(this.mappaPaesiSimulati.containsKey(e.getPaese())) {
+				int persTemp = this.mappaPaesiSimulati.get(e.getPaese());
+				mappaPaesiSimulati.put(e.getPaese(), persTemp+e.getNumPersone()-notStanziali);
+			}else {
+				mappaPaesiSimulati.put(e.getPaese(), e.getNumPersone()-notStanziali);
+			}
+			
 			
 			List<Country> listaPaesiVicini = new ArrayList<>();
 			listaPaesiVicini = Graphs.neighborListOf(this.graph, e.getPaese());
@@ -107,14 +113,21 @@ public class Simulator {
 				this.queue.add(nuovo);
 				if(this.mappaPaesiSimulati.containsKey(nuovo.getPaese())) {
 					int personePrec = this.mappaPaesiSimulati.get(nuovo.getPaese());
-					this.mappaPaesiSimulati.replace(paese, personePrec+migTemp);
+					mappaPaesiSimulati.put(nuovo.getPaese(), migTemp+personePrec);
 				}else {
-					mappaPaesiSimulati.put(nuovo.getPaese(), nuovo.getNumPersone());
+					mappaPaesiSimulati.put(nuovo.getPaese(), migTemp);
 				}
+				//mappaPaesiSimulati.put(nuovo.getPaese(), migTemp);
 			}
 			
 		}
 		
+		
+	}
+
+	public Map<Country, Integer> getMappaSimulazione() {
+		
+		return mappaPaesiSimulati;
 		
 	}
 	
